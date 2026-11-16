@@ -1,4 +1,4 @@
-# FastAPI Practice
+# Django Practice
 
 Python / Django 기본 기능 연습용 프로젝트입니다.
 
