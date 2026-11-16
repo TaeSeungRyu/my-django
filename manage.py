@@ -20,3 +20,15 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# manage.py의 주요 역할
+# 명령어	|	역할
+# runserver	| 개발 서버 실행
+# startapp	| 새로운 App 생성
+# makemigrations	|	Model 변경사항을 마이그레이션 파일로 생성
+# migrate	|	마이그레이션을 DB에 적용
+# createsuperuser	|	관리자 계정 생성
+# shell	|	Django 환경에서 Python 코드 실행
+# test	|	테스트 실행
+# check	| 	프로젝트 설정 및 구성 검사
