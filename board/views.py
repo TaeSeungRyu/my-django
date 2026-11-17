@@ -1,13 +1,15 @@
 from django.http import JsonResponse
+from .models import Post
 
 def get_posts(request):
-    posts = [
-        {"id": 1, "title": "첫 번째 게시글"},
-        {"id": 2, "title": "두 번째 게시글"},
-        {"id": 3, "title": "세 번째 게시글"},
-    ]
+    posts = Post.objects.all().values(
+        "id",
+        "title",
+        "content",
+        "created_at"
+    )
 
     return JsonResponse({
         "success": True,
-        "data": posts
+        "data": list(posts)
     })
