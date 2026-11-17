@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django CRUD 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        input,
+        textarea {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 8px 0 16px;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        pre {
+            background: #f3f3f3;
+            padding: 16px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Django 게시글 CRUD 테스트</h1>
+
+    <h3>게시글 입력</h3>
+    <input id="postId" type="number" placeholder="게시글 ID (수정/삭제 시 사용)">
+    <input id="title" placeholder="제목">
+    <textarea id="content" rows="4" placeholder="내용"></textarea>
+
+    <button onclick="getPosts()">전체 조회</button>
+    <button onclick="getPost()">상세 조회</button>
+    <button onclick="createPost()">등록 (POST)</button>
+    <button onclick="updatePost()">수정 (PUT)</button>
+    <button onclick="deletePost()">삭제 (DELETE)</button>
+
+    <h3>API 응답 결과</h3>
+    <pre id="result">버튼을 눌러 API를 테스트하세요.</pre>
+
+    <script>
+        const API_URL = "/api/board/posts/";
+
+        const result = document.getElementById("result");
+        const postId = document.getElementById("postId");
+        const title = document.getElementById("title");
+        const content = document.getElementById("content");
+
+        async function requestApi(url, method = "GET", body = null) {
+            try {
+                const options = { method };
+
+                if (body !== null) {
+                    options.headers = {
+                        "Content-Type": "application/json"
+                    };
+                    options.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(url, options);
+                const data = await response.json();
+
+                result.textContent = JSON.stringify({
+                    status: response.status,
+                    ...data
+                }, null, 2);
+
+            } catch (error) {
+                result.textContent = "요청 오류: " + error.message;
+            }
+        }
+
+        function getPosts() {
+            requestApi(API_URL);
+        }
+
+        function getPost() {
+            if (!postId.value) return alert("게시글 ID를 입력하세요.");
+            requestApi(API_URL + postId.value + "/");
+        }
+
+        function createPost() {
+            requestApi(API_URL, "POST", {
+                title: title.value,
+                content: content.value
+            });
+        }
+
+        function updatePost() {
+            if (!postId.value) return alert("게시글 ID를 입력하세요.");
+
+            requestApi(API_URL + postId.value + "/", "PUT", {
+                title: title.value,
+                content: content.value
+            });
+        }
+
+        function deletePost() {
+            if (!postId.value) return alert("게시글 ID를 입력하세요.");
+
+            if (!confirm("정말 삭제하시겠습니까?")) return;
+
+            requestApi(API_URL + postId.value + "/", "DELETE");
+        }
+    </script>
+</body>
+
+</html>
