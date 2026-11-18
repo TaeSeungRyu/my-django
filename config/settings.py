@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'board',
+    'board', # 추가
+    'rest_framework',  # 추가
 ]
 
 MIDDLEWARE = [
