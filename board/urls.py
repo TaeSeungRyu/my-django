@@ -8,5 +8,7 @@ urlpatterns = [
     path("posts/<int:post_id>/", post_detail),
     path("posts/test/", test_page),
     # DRF API
-    path("drf/posts/", drf_posts),    
+    # DRF API
+    path("drf/posts/", drf_posts.posts),
+    path("drf/posts/<int:post_id>/", drf_posts.post_detail),
 ]
