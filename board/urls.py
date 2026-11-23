@@ -7,6 +7,12 @@ from .drf_views import (
 )
 from .api_views import PostListView, PostDetailView
 
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .viewsets import PostViewSet
+
+router = DefaultRouter()
+router.register("posts", PostViewSet, basename="posts")  # URL 경로, 뷰셋, 내부에서 관리하는 name
 
 urlpatterns = [
     path("posts/", posts),
@@ -19,4 +25,7 @@ urlpatterns = [
     # DRF APIView
     path("apiview/posts/", PostListView.as_view()),
     path("apiview/posts/<int:post_id>/", PostDetailView.as_view()),    
+
+    # DRF ModelViewSet
+    path("viewset/", include(router.urls)),  # viewset/ + posts/ ===> 이렇게 조합이 된다!
 ]
