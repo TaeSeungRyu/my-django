@@ -2,14 +2,24 @@ from rest_framework import viewsets
 
 from .models import Post
 from .serializers import PostSerializer
-
+from rest_framework.permissions import IsAuthenticated
 
 class PostViewSet(viewsets.ModelViewSet): # CRUD 기능을 상속받음
 
     queryset = Post.objects.all().order_by("-id") # 어떤 DB 데이터를 사용할지 지정
 
     serializer_class = PostSerializer # 어떤 Serializer를 사용할지 지정
-    
+    permission_classes = [IsAuthenticated]    
+
+    def list(self, request, *args, **kwargs):
+
+        print(request.user)
+        print(request.user.id)
+        print(request.user.username)
+        print(request.user.is_authenticated)
+        print(request.user.is_staff)
+
+        return super().list(request, *args, **kwargs)    
 # 기본 URL 생성 모습
 # 전체 조회	GET	/api/board/viewset/posts/
 # 상세 조회	GET	/api/board/viewset/posts/1/
