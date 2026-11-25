@@ -1,25 +1,36 @@
 from rest_framework import viewsets
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser,
+)
 
 from .models import Post
 from .serializers import PostSerializer
-from rest_framework.permissions import IsAuthenticated
 
-class PostViewSet(viewsets.ModelViewSet): # CRUD 기능을 상속받음
 
-    queryset = Post.objects.all().order_by("-id") # 어떤 DB 데이터를 사용할지 지정
+class PostViewSet(viewsets.ModelViewSet):
 
-    serializer_class = PostSerializer # 어떤 Serializer를 사용할지 지정
-    permission_classes = [IsAuthenticated]    
+    queryset = Post.objects.all().order_by("-id")
+    serializer_class = PostSerializer
 
-    def list(self, request, *args, **kwargs):
+    def get_permissions(self):
+        print("my permission : ",self.action)
 
-        print(request.user)
-        print(request.user.id)
-        print(request.user.username)
-        print(request.user.is_authenticated)
-        print(request.user.is_staff)
+        # 전체 조회, 상세 조회
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]
 
-        return super().list(request, *args, **kwargs)    
+        # 등록, 전체 수정, 부분 수정
+        if self.action in ["create", "update", "partial_update"]:
+            return [IsAuthenticated()]
+
+        # 삭제
+        if self.action == "destroy":
+            return [IsAdminUser()]
+
+        # 그 외 요청
+        return [IsAuthenticated()]
 # 기본 URL 생성 모습
 # 전체 조회	GET	/api/board/viewset/posts/
 # 상세 조회	GET	/api/board/viewset/posts/1/
