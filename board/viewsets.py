@@ -31,6 +31,17 @@ class PostViewSet(viewsets.ModelViewSet):
 
         # 그 외 요청
         return [IsAuthenticated()]
+
+    def list(self, request, *args, **kwargs):
+
+        print(request.user.id)
+        print(request.user.username)
+        print(request.user.is_authenticated)
+
+        # 그룹 권한 검사도 가능
+        print(request.user.has_perm("board.delete_post"))
+
+        return super().list(request, *args, **kwargs)    
 # 기본 URL 생성 모습
 # 전체 조회	GET	/api/board/viewset/posts/
 # 상세 조회	GET	/api/board/viewset/posts/1/
