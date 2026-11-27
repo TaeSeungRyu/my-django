@@ -34,14 +34,14 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        print(request.user.id)
+        # DB에서 조회된 사용자 정보
         print(request.user.username)
-        print(request.user.is_authenticated)
 
-        # 그룹 권한 검사도 가능
-        print(request.user.has_perm("board.delete_post"))
+        # JWT 내부 Claim
+        print(request.auth.get("username"))
+        print(request.auth.get("roles"))
 
-        return super().list(request, *args, **kwargs)    
+        return super().list(request, *args, **kwargs)
 # 기본 URL 생성 모습
 # 전체 조회	GET	/api/board/viewset/posts/
 # 상세 조회	GET	/api/board/viewset/posts/1/
